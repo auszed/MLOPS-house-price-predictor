@@ -1,30 +1,25 @@
-# Assigns a readable name to the workflow, which appears in the GitHub Actions tab.
 name: Streamlit CI
 
-# Defines the events that trigger this workflow.
+# when we execute the pipeline
 on:
-  # Triggers the workflow when code is pushed to the repository.
   push:
-    # Crucial optimization: Only runs the workflow if changes occur within the 'streamlit_app' directory.
+    # we execute this pipeline when this folder change
     paths:
       - 'streamlit_app/**'
-  # Allows the workflow to be triggered manually from the GitHub Actions UI.
   workflow_dispatch:
 
-# Defines the set of jobs (tasks) to be executed.
+# jobs or steps that we need to finish this job
 jobs:
-  # The main job name. This job handles building the Docker image and pushing it.
   build-and-push:
-    # Specifies the type of runner (virtual machine) that will execute the job.
     runs-on: ubuntu-latest
     
-    # A sequence of tasks to be run within the job.
+    # steps of the job
     steps:
       # Downloads the repository code onto the runner, making files accessible.
       - name: Checkout code
         uses: actions/checkout@v4
-        
-      # Sets up Docker Buildx, enabling advanced Docker features like enhanced caching and multi-platform builds.
+
+      # Sets up Docker Buildx, enabling advanced Docker features like enhanced caching and multi-platform builds.  
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         
@@ -32,20 +27,16 @@ jobs:
       - name: Log in to DockerHub Container Registry
         uses: docker/login-action@v3
         with:
-          # Specifies the Docker registry (Docker Hub).
           registry: docker.io
-          # Username and token
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
-
-      # The main step for building the image and pushing it to the registry in the docker hub
-      - name: Build and push Docker image
+      #  build the image the streamlit app and put it in the dockerhub
+      - name: Build and push Streamlit Docker image
         uses: docker/build-push-action@v5
         with:
-          # Specifies the directory containing the Dockerfile (the build context).
-          context: ./streamlit_app
+          context: . 
+          file: Dockerfile.streamlit 
           # Instructs the action to push the built image to Docker Hub.
           push: true
-          # Defines the image tag. It tags the image as 'streamlit:latest' under the user's namespace.
           tags: docker.io/${{ vars.DOCKERHUB_USERNAME }}/streamlit:latest

@@ -194,6 +194,12 @@ secrets and variables > actions
 add the variables in the repository so the updates get directly when we update
 
 
+steps to update the pipeline
+```
+git add .github/workflows/NAMEOFFILE.yaml
+git commit -am "COMMENTS"
+git push origin main
+```
 
 ## 🧠 Learn More About MLOps
 
