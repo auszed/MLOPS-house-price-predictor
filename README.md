@@ -29,38 +29,23 @@ house-price-predictor/
 
 ---
 
-## 🛠️ Setting up Learning/Development Environment
-
-To begin, ensure the following tools are installed on your system:
-
-- [Python 3.11](https://www.python.org/downloads/)
-- [Git](https://git-scm.com/)
-- [Visual Studio Code](https://code.visualstudio.com/) or your preferred editor
-- [UV – Python package and environment manager](https://github.com/astral-sh/uv)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) **or** [Podman Desktop](https://podman-desktop.io/)
-
----
-
 ## 🚀 Preparing Your Environment
 
-1. **Fork this repo** on GitHub.
-
-2. **Clone your forked copy:**
+1. **Clone your forked copy:**
 
    ```bash
-   # Replace xxxxxx with your GitHub username or org
-   git clone https://github.com/xxxxxx/house-price-predictor.git
+   git clone https://github.com/auszed/MLOPS-house-price-predictor.git
    cd house-price-predictor
    ```
 
-3. **Setup Python Virtual Environment using UV:**
+2. **Setup Python Virtual Environment using UV:**
 
    ```bash
    uv venv --python python3.11
-   source .venv/bin/activate
+   .venv\Scripts\activate
    ```
 
-4. **Install dependencies:**
+3. **Install dependencies:**
 
    ```bash
    uv pip install -r requirements.txt
@@ -73,31 +58,10 @@ To begin, ensure the following tools are installed on your system:
 To track experiments and model runs:
 
 ```bash
-cd deployment/mlflow
-docker compose -f mlflow-docker-compose.yml up -d
-docker compose ps
-```
-
-> 🐧 **Using Podman?** Use this instead:
-
-```bash
-podman compose -f mlflow-docker-compose.yml up -d
-podman compose ps
+docker compose -f deployment/mlflow/mlflow-docker-compose.yml up -d
 ```
 
 Access the MLflow UI at [http://localhost:5555](http://localhost:5555)
-
----
-
-## 📒 Using JupyterLab (Optional)
-
-If you prefer an interactive experience, launch JupyterLab with:
-
-```bash
-uv python -m jupyterlab
-# or
-python -m jupyterlab
-```
 
 ---
 
@@ -162,6 +126,73 @@ curl -X POST "http://localhost:8000/predict" \
 ```
 
 Be sure to replace `http://localhost:8000/predict` with actual endpoint based on where its running. 
+
+
+### build fast api app
+create the image
+```
+docker image build -t fastapi-app:latest -f Dockerfile.fastapi .
+```
+
+create the container with a name 
+```
+docker run -idt -p 8888:8000 --name api fastapi-app:latest
+```
+
+### build stramlit app
+build the image
+```
+docker run -idt -p 8501:8501 --name streamlit-ui streamlit-app:latest
+```
+
+running the container
+```
+docker run -idtP NAMEIMAGE:VERSION
+```
+
+### DOCKERHUB IMAGE CLOUD
+
+login into dockerhub
+```
+docker login
+```
+
+PUSH the image into a hub to upload the image to my personal hub i need to tag the image with the correct format so the image name should had my tagname
+```
+docker image push DOCKERUSERNAME/NAMEIMAGE:VERSION
+```
+
+
+### troubushooting the container 
+
+logs of the container if something fails
+```
+docker logs NAMECONTAINER 
+```
+
+run the container using bash
+```
+docker run --rm -it fastapi bash
+```
+
+
+## docker compose 
+with this we will build the 2 services ready for production
+```
+docker compose build
+```
+
+then we need to validate it and to get it up and run it
+```
+docker compose up -d
+```
+
+## pipeline
+For the pipeline enviroment variables we need to go in github to 
+
+secrets and variables > actions 
+add the variables in the repository so the updates get directly when we update
+
 
 
 ## 🧠 Learn More About MLOps

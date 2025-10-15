@@ -80,6 +80,8 @@ with col2:
 
             try:
                 # Get API endpoint from environment variable or use default
+
+                # we get the enviroment variable from the docker compose
                 api_endpoint = os.getenv("API_URL", "http://model:8000")
                 predict_url = f"{api_endpoint.rstrip('/')}/predict"
 
