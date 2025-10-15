@@ -1,0 +1,19 @@
+FROM python:3.9-slim
+
+# directory of the container
+WORKDIR /app
+
+# copy everything from that root to the workdirectory
+COPY streamlit_app/app.py streamlit_app/requirements.txt .
+
+# install the modules
+RUN pip install -r requirements.txt
+
+# copy all the files that end in pkl into the location
+
+# export the port
+EXPOSE 8501
+
+# run the command for make work Fast api
+CMD ["streamlit",  "run",  "app.py",  "--server.address=0.0.0.0"]
+
