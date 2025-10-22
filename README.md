@@ -194,10 +194,10 @@ secrets and variables > actions
 add the variables in the repository so the updates get directly when we update
 
 
-steps to update the pipeline
+steps to update the pipeline, like always and deppending on the setup the pipeline will run
 ```
-git add .github/workflows/NAMEOFFILE.yaml
-git commit -am "COMMENTS"
+git add . 
+git commit
 git push origin main
 ```
 

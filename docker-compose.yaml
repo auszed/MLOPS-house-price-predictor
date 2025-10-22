@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile.fastapi
     ports:
-      - "8888:8000"
+      - "8000:8000"
 
   streamlit:
     image: hannsflip/streamlit-app:dev
@@ -15,8 +15,9 @@ services:
       context: .
       dockerfile: Dockerfile.streamlit
     ports:
-      - "32768:8501"
+      - "8501:8501"
     environment:
       # we are getting the datra from fastapi service
       # this its the app that checks app.py for the connection
+      # we are showing the container port in the url
       API_URL: http://fastapi:8000
